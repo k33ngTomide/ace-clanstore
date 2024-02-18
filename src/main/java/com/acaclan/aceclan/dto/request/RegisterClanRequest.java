@@ -7,6 +7,8 @@ import lombok.Data;
 public class RegisterClanRequest {
 
     private String username;
+
     private String password;
+
     private String email;
 }
