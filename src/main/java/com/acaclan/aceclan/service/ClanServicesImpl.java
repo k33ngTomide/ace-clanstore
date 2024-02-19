@@ -6,6 +6,7 @@ import com.acaclan.aceclan.dto.request.LoginRequest;
 import com.acaclan.aceclan.dto.request.RegisterClanRequest;
 import com.acaclan.aceclan.dto.response.ApiResponse;
 import com.acaclan.aceclan.exception.IncorrectPasswordException;
+import com.acaclan.aceclan.exception.UserAlreadyExistsException;
 import com.acaclan.aceclan.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,12 +25,20 @@ public class ClanServicesImpl implements ClanService{
 
     @Override
     public ApiResponse<Clan> addClan(RegisterClanRequest clanRequest) {
+        validateUserDoesNotExist(clanRequest.getUsername(), clanRequest.getEmail());
         Clan clan = modelMapper.map(clanRequest, Clan.class);
         Clan savedClan = clanDAO.save(clan);
         return new ApiResponse<>(
                 savedClan,
                 HttpStatus.CREATED.toString(),
                 "Account Created Successfully");
+    }
+
+    private void validateUserDoesNotExist(String username, String email) {
+
+        Optional<Clan> clan = clanDAO.findClanByUsernameOrEmail(username, email);
+        if(clan.isPresent())
+            throw new UserAlreadyExistsException("Username or email already Used");
     }
 
     @Override

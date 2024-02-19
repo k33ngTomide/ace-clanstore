@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ClanDAO extends MongoRepository<Clan, String> {
     Optional<Clan> findClanByUsername(String username);
+
+    Optional<Clan> findClanByUsernameOrEmail(String username, String email);
 }
