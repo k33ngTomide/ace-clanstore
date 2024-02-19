@@ -23,6 +23,14 @@ public class Clan {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
+    @NotEmpty(message = "phoneNumber cannot be empty")
+    private String phoneNumber;
+
+    @NotEmpty(message = "FunFact About you")
+    private String funFact;
+
+    private String pictureLink;
+
     private LocalDate dateCreated;
 
 }

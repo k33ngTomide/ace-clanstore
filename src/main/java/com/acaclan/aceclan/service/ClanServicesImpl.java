@@ -2,6 +2,7 @@ package com.acaclan.aceclan.service;
 
 import com.acaclan.aceclan.data.dao.ClanDAO;
 import com.acaclan.aceclan.data.model.Clan;
+import com.acaclan.aceclan.dto.request.AddPictureRequest;
 import com.acaclan.aceclan.dto.request.LoginRequest;
 import com.acaclan.aceclan.dto.request.RegisterClanRequest;
 import com.acaclan.aceclan.dto.response.ApiResponse;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,12 +25,14 @@ public class ClanServicesImpl implements ClanService{
 
     private ClanDAO clanDAO;
     private ModelMapper modelMapper;
+    private CloudinaryService cloudinaryService;
 
     @Override
     public ApiResponse<Clan> addClan(RegisterClanRequest clanRequest) {
         validateUserDoesNotExist(clanRequest.getUsername(), clanRequest.getEmail());
         Clan clan = modelMapper.map(clanRequest, Clan.class);
         clan.setDateCreated(LocalDate.now());
+
         Clan savedClan = clanDAO.save(clan);
         return new ApiResponse<>(
                 savedClan,
@@ -65,4 +69,14 @@ public class ClanServicesImpl implements ClanService{
         return clan.get();
     }
 
+
+    @Override
+    public Clan addPicture(AddPictureRequest<MultipartFile> addPictureRequest) {
+        Clan foundClan = findClan(addPictureRequest.getUsername());
+        String imageUrl = cloudinaryService.upload(addPictureRequest.getPicture());
+
+        foundClan.setPictureLink(imageUrl);
+        return clanDAO.save(foundClan);
+
+    }
 }
