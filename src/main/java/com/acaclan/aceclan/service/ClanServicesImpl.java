@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class ClanServicesImpl implements ClanService{
     public ApiResponse<Clan> addClan(RegisterClanRequest clanRequest) {
         validateUserDoesNotExist(clanRequest.getUsername(), clanRequest.getEmail());
         Clan clan = modelMapper.map(clanRequest, Clan.class);
+        clan.setDateCreated(LocalDate.now());
         Clan savedClan = clanDAO.save(clan);
         return new ApiResponse<>(
                 savedClan,
