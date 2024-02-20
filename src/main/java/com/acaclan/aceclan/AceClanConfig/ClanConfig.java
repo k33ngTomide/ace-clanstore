@@ -19,6 +19,20 @@ public class ClanConfig {
     private String cloudinaryApiKey;
     @Value("${cloudinary.api.secret}")
     private String cloudinaryApiSecretKey;
+    @Value("${CLIENT_ID}")
+    private String clientID;
+    @Value("${CLIENT_SECRET}")
+    private String clientSecret;
+    @Value("${PORT}")
+    private String port;
+    @Value("${USERNAME}")
+    private String username;
+    @Value("${PASSWORD}")
+    private String password;
+    @Value("${BASE_NAME}")
+    private String baseName;
+
+
 
     @Bean
     public Cloudinary cloudinary(){

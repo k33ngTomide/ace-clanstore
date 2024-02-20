@@ -9,10 +9,12 @@ import com.acaclan.aceclan.service.ClanService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -64,5 +66,10 @@ public class ClanController {
                     error.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+    }
+
+    @GetMapping("/google/register")
+    public Map<String, Object> registerWith(OAuth2AuthenticationToken auth2AuthenticationToken){
+        return auth2AuthenticationToken.getPrincipal().getAttributes();
     }
 }
